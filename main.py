@@ -42,7 +42,7 @@ def etl_dim():
     dim_product_df = pd.read_sql(dim_product_sql, con=connection)
     dim_product_df.reset_index()
     dim_product_df.rename(columns={"index":"id"})
-    dim_product_df.to_sql('dim_product',con=connection, schema='target', if_exist='replace', index=False)
+    dim_product_df.to_sql('dim_product',con=connection, schema='target', if_exists='replace', index=False)
 
 
 def etl():
