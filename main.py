@@ -20,7 +20,7 @@ def verify_data_ingestion():
 
 def extract_data():
     df = pd.read_excel('./datasets/Financial Sample.xlsx')
-    df.columns = [i.lower().replace(" ","_") for i in df.columns]
+    df.columns = [i.strip().lower().replace(" ","_") for i in df.columns]
     df.reset_index(inplace=True)
     df.rename(columns = {"index": 'id'})
     input_data_size = df.shape[0]
