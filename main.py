@@ -64,7 +64,7 @@ def create_facts():
     df = pd.read_sql(sql, con=stagging_connection)
     df.reset_index(inplace=True)
     df.rename(columns = {"index": "id"}, inplace=True)
-    df.to_sql(fact_financial, con=stagging_connection, schema='stagging', if_exits='replace',index=False)
+    df.to_sql('fact_financial', con=stagging_connection, schema='stagging', if_exits='replace',index=False)
 
 
 def etl():
