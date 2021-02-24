@@ -56,7 +56,7 @@ def create_facts():
     from financial f
     left join dim_segment s on s.name = f.segment
     left join dim_country c on c.name = f.country
-    left join dim_product p on p.name = f.country
+    left join dim_product p on p.name = f.product
     left join dim_discount_band db on db.value = f.discount_band
     left join dim_date d on d.date = f.date
     """
