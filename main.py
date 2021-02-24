@@ -74,7 +74,7 @@ def load_dims():
         df.to_sql(table, con = target_connection,index=False, if_exists='replace', schema='target')
 
 def load_facts():
-    fact_tables = ['fact_financial']:
+    fact_tables = ['fact_financial']
     for table in fact_tables:
         sql = f'select * from {table}'
         df = pd.read_sql(sql, con=stagging_connection)
