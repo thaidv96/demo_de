@@ -44,9 +44,12 @@ def etl_dim(*cols,table_name=None,connection):
 
 def etl_dims():
     start_data()
-    etl_dim('product','price','discount_band', table_name='dim_product', connection=stagging_connection)
+    etl_dim('product','manufacturing_price', table_name='dim_product', connection=stagging_connection)
     etl_dim('segment', table_name='dim_segment', connection=stagging_connection)
     etl_dim('country', table_name='dim_country', connection=stagging_connection)
+    etl_dim('discount_band', table_name='dim_discount_band', connection=stagging_connection)
+
+
 
 
 def etl():
