@@ -17,7 +17,7 @@ def start_data():
     print("START INGESTING DATA TO SOURCE...")
     df = pd.read_excel('./datasets/Financial Sample.xlsx')
     input_data_size = df.shape[0]
-    df.to_sql('financial', con = connection, schema='source')
+    df.to_sql('financial', con = connection, schema='source',if_exists='replace')
     ## validate ingesting data 
     sql = "Select count(1) as num_records from source.financial"
     check_result = pd.read_sql(sql, con = connection)
