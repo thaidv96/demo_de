@@ -19,14 +19,12 @@ def verify_data_ingestion():
 
 
 def extract_data():
-    print("START INGESTING DATA TO STAGGING...")
     df = pd.read_excel('./datasets/Financial Sample.xlsx')
     df.columns = [i.lower().replace(" ","_") for i in df.columns]
     df.reset_index(inplace=True)
     df.rename(columns = {"index": 'id'})
     input_data_size = df.shape[0]
     df.to_sql('financial', con = stagging_connection, schema='stagging',if_exists='replace')
-    print("SUCCESS LOAD DATA TO STAGGING AREA")
 
 def gen_simple_dim_select_sql(*fields, table='financial'):
     return f"""Select distinct {','.join(fields)} from {table}"""
@@ -49,7 +47,7 @@ def create_dims():
     create_dim('date','month_number','month_name','year', table_name='dim_date', connection=stagging_connection)
     create_dim('discount_band',nammings=['value'] ,table_name='dim_discount_band', connection=stagging_connection)
 
-def create_facts()
+def create_facts():
     sql = """
     SELECT s.id segment_id, c.id country_id, 
     p.id product_id, db.id discount_band_id, 
