@@ -19,10 +19,10 @@ def start_data():
     input_data_size = df.shape[0]
     df.to_sql('financial', con = connection, schema='source')
     ## validate ingesting data 
-    sql = "Select count(1) from source.financial"
+    sql = "Select count(1) as num_records from source.financial"
     check_result = pd.read_sql(sql, con = connection)
     print("Input Data Size: ", input_data_size)
-    print("Ingested Data Size:", check_result['count'].values[0])
+    print("Ingested Data Size:", check_result['num_records'].values[0])
     with open("ingest_start_data.log",'a+') as f:
         f.write(f"{datetime.now()},{input_data_size},{check_result}\n")
     print("SUCCESS")
