@@ -32,7 +32,7 @@ def gen_simple_dim_select_sql(*fields, table='stagging_financial'):
     return f"""Select distinct {','.join(fields)} from {table}"""
 
 
-def etl_dim(*cols,table_name=None,connection):
+def create_dim(*cols,table_name=None,connection):
     print(f"GENERATING {table_name} IN STAGGING AREA...")
     sql = gen_simple_dim_select_sql(*cols)
     dim_df = pd.read_sql(sql, con=connection)
@@ -42,20 +42,20 @@ def etl_dim(*cols,table_name=None,connection):
     print("DONE")
 
 
-def etl_dims():
+def create_dims():
     start_data()
-    etl_dim('product','manufacturing_price', table_name='dim_product', connection=stagging_connection)
-    etl_dim('segment', table_name='dim_segment', connection=stagging_connection)
-    etl_dim('country', table_name='dim_country', connection=stagging_connection)
-    etl_dim('date','month_number','month_name','year', table_name='dim_date', connection=stagging_connection)
-    etl_dim('discount_band', table_name='dim_discount_band', connection=stagging_connection)
+    create_dim('product','manufacturing_price', table_name='dim_product', connection=stagging_connection)
+    create_dim('segment', table_name='dim_segment', connection=stagging_connection)
+    create_dim('country', table_name='dim_country', connection=stagging_connection)
+    create_dim('date','month_number','month_name','year', table_name='dim_date', connection=stagging_connection)
+    create_dim('discount_band', table_name='dim_discount_band', connection=stagging_connection)
 
 
 
 
 def etl():
 
-    etl_dims()
+    create_dims()
 
 if __name__ == '__main__':
     if args.job_type == 'etl':
