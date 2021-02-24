@@ -66,6 +66,20 @@ def create_facts():
     df.rename(columns = {"index": "id"}, inplace=True)
     df.to_sql('fact_financial', con=stagging_connection, schema='stagging', if_exists='replace',index=False)
 
+def load_dims():
+    dim_tables = ['dim_segment','dim_country', 'dim_product','dim_discount_band', 'dim_date']
+    for table in dim_tables:
+        sql = f'select * from {table}'
+        df = pd.read_sql(sql, con=stagging_connection)
+        df.to_sql(table, con = target_connection,index=False, if_exists='replace', schema='target')
+
+def load_facts():
+    fact_tables = ['fact_financial']:
+    for table in fact_tables:
+        sql = f'select * from {table}'
+        df = pd.read_sql(sql, con=stagging_connection)
+        df.to_sql(table, con = target_connection,index=False, if_exists='replace', schema='target')
+
 
 def etl():
     print("EXTRACTING...")
@@ -73,6 +87,13 @@ def etl():
     print("DATA EXTRACTED.\nTRANSFORMING...")
     create_dims()
     create_facts()
+    print("DATA TRANSFORMED.\nLOADING...")
+    load_dims()
+    load_facts()
+    print("DATA LOADED")
+    print("\n\nDONE")
+
+
 
 
 if __name__ == '__main__':
