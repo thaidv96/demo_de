@@ -22,8 +22,10 @@ def start_data():
     print("START INGESTING DATA TO STAGGING...")
     df = pd.read_excel('./datasets/Financial Sample.xlsx')
     df.columns = [i.lower().replace(" ","_") for i in df.columns]
+    df.reset_index(inplace=True)
+    df.rename(columns = {"index": 'id'})
     input_data_size = df.shape[0]
-    df.to_sql('financial', con = stagging_connection, schema='stagging',if_exists='replace')
+    df.to_sql('stagging_financial', con = stagging_connection, schema='stagging',if_exists='replace')
     print("SUCCESS LOAD DATA TO STAGGING AREA")
 
 def gen_simple_dim_select_sql(*fields, table='stagging_financial'):
