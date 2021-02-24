@@ -33,12 +33,12 @@ def start_data():
         f.write(f"{datetime.now()},{input_data_size},{check_result}\n")
     print("SUCCESS")
 
-def gen_simple_dim_select_sql(*fields, table=None):
-    return f"""Select {*fields} from {table}"""
+def gen_simple_dim_select_sql(*fields, table='financial'):
+    return f"""Select distinct {','.join(fields)} from {table}"""
 
 
 def etl_dim():
-    dim_product_sql = gen_simple_dim_select_sql('product', 'manufacturing_price', table='financial')
+    dim_product_sql = gen_simple_dim_select_sql('product', 'manufacturing_price')
     dim_product_df = pd.read_sql(dim_product_sql, con=connection)
     dim_product_df.reset_index()
     dim_product_df.rename(columns={"index":"id"})
