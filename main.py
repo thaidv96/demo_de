@@ -11,6 +11,11 @@ parser.add_argument("--root_password", type=str, required=True)
 args = parser.parse_args()
 engine = create_engine(f'mysql+pymysql://root:{args.root_password}@localhost/source')
 connection = engine.connect()
+target_engine = create_engine(f'mysql+pymysql://root:{args.root_password}@localhost/target')
+target_connection = target_engine.connect()
+
+def verify_data_ingestion():
+    pass
 
 
 def start_data():
@@ -28,10 +33,25 @@ def start_data():
         f.write(f"{datetime.now()},{input_data_size},{check_result}\n")
     print("SUCCESS")
 
+def gen_simple_dim_select_sql(*fields, table=None):
+    return f"""Select {*fields} from {table}"""
 
+
+def etl_dim():
+    dim_product_sql = gen_simple_dim_select_sql('product', 'manufacturing_price', table='financial')
+    dim_product_df = pd.read_sql(dim_product_sql, con=connection)
+    dim_product_df.reset_index()
+    dim_product_df.rename(columns={"index":"id"})
+    dim_product_df.to_sql('dim_product',con=connection, schema='target', if_exist='replace', index=False)
+
+
+def etl():
+    etl_dim()
 
 if __name__ == '__main__':
     if args.job_type == 'start':
         start_data()
 
+    if args.job_type == 'etl':
+        etl()    
 
