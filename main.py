@@ -16,6 +16,7 @@ connection = engine.connect()
 def start_data():
     print("START INGESTING DATA TO SOURCE...")
     df = pd.read_excel('./datasets/Financial Sample.xlsx')
+    df.columns = [i.lower().replace(" ","_") for i in df.columns]
     input_data_size = df.shape[0]
     df.to_sql('financial', con = connection, schema='source',if_exists='replace')
     ## validate ingesting data 
